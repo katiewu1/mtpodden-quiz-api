@@ -12,23 +12,27 @@ mongoose.connect(mongoUrl, {
 mongoose.Promise = Promise
 
 // Schema and Model for the DB
-const SubmissionSchema = new mongoose.Schema({
+const FormSchema = new mongoose.Schema({
   firstname: {
     type: String,
     required: true,
   },
   lastname: {
     type: String,
-    required: true,
+    // required: true,
   },
   profession: {
     type: String,
-    required: true,
+    // required: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
+  },
+  gdpr: {
+    type: Boolean,
+    required: true,
   },
   answers: {
     type: Array,
@@ -36,7 +40,7 @@ const SubmissionSchema = new mongoose.Schema({
   },
 })
 
-const Submission = mongoose.model('Submission', SubmissionSchema)
+const Form = mongoose.model('Form', FormSchema)
 
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
@@ -63,8 +67,26 @@ app.get('/', (req, res) => {
   res.send(listEndpoints(app))
 })
 
-// get all submissions
-// post a submission
+// get all
+app.get('/results', async (req, res) => {
+  try {
+    const allResults = await Form.find()
+    res.status(200).json({ response: allResults, success: true })
+  } catch (err) {
+    res.status(400).json({ response: err, success: false })
+  }
+})
+
+// post - submit a form
+app.post('/submit', async (req, res) => {
+  try {
+    const newSubmit = await new Form(req.body).save()
+
+    res.status(201).json({ response: newSubmit, success: true })
+  } catch (err) {
+    res.status(400).json({ response: err, success: false })
+  }
+})
 
 // Start the server
 app.listen(port, () => {
