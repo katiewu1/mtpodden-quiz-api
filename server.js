@@ -38,6 +38,10 @@ const FormSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  createdAt: {
+    type: Date,
+    default: () => Date.now(),
+  },
 })
 
 const Form = mongoose.model('Form', FormSchema)
