@@ -19,11 +19,9 @@ const FormSchema = new mongoose.Schema({
   },
   lastname: {
     type: String,
-    // required: true,
   },
   profession: {
     type: String,
-    // required: true,
   },
   email: {
     type: String,
@@ -69,16 +67,6 @@ app.use((req, res, next) => {
 // Start defining your routes here
 app.get('/', (req, res) => {
   res.send(listEndpoints(app))
-})
-
-// get all
-app.get('/results', async (req, res) => {
-  try {
-    const allResults = await Form.find()
-    res.status(200).json({ response: allResults, success: true })
-  } catch (err) {
-    res.status(400).json({ response: err, success: false })
-  }
 })
 
 // post - submit a form
